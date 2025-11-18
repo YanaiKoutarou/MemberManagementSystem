@@ -105,72 +105,95 @@ export default function TodosPage() {
     }
   };
 
-  return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6">Todo List</h1>
+return (
+  <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
+    {/* タイトル */}
+    <h1 className="text-3xl font-bold text-blue-600 mb-6">TODOリスト</h1>
 
-      <form onSubmit={handleAddTodo} className="w-full max-w-md bg-white p-8 rounded-lg shadow-md mb-6">
-        <label className="block mb-4">
-          <span className="text-gray-700">New Todo</span>
-          <input
-            type="text"
-            value={newTodoTitle}
-            onChange={(e) => setNewTodoTitle(e.target.value)}
-            required
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </label>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-        >
-          Add Todo
-        </button>
-      </form>
+    {/* Todo 追加フォーム */}
+    <form
+      onSubmit={handleAddTodo}
+      className="w-full max-w-md bg-white p-8 rounded-lg shadow-md mb-6"
+    >
+      <label className="block mb-4">
+        <span className="text-gray-700">新しいTODO</span>
 
-      {message && <p className="mt-4 text-red-600">{message}</p>}
+        {/* 入力欄 */}
+        <input
+          type="text"
+          value={newTodoTitle}
+          onChange={(e) => setNewTodoTitle(e.target.value)}
+          required
+          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
+      </label>
 
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-        {todos.length === 0 ? (
-          <p className="text-gray-600">No todos yet. Add one above!</p>
-        ) : (
-          <ul>
-            {todos.map((todo) => (
-              <li
-                key={todo.id}
-                className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0"
-              >
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => handleToggleComplete(todo.id, todo.completed)}
-                    className="form-checkbox h-5 w-5 text-blue-600"
-                  />
-                  <span
-                    className={`ml-3 text-lg ${
-                      todo.completed ? "line-through text-gray-500" : "text-gray-900"
-                    }`}
-                  >
-                    {todo.title}
-                  </span>
-                </div>
-                <button
-                  onClick={() => handleDeleteTodo(todo.id)}
-                  className="text-red-600 hover:text-red-800 transition"
+      {/* 追加ボタン */}
+      <button
+        type="submit"
+        className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+      >
+        追加
+      </button>
+    </form>
+
+    {/* メッセージ表示 */}
+    {message && <p className="mt-4 text-red-600">{message}</p>}
+
+    {/* Todo リスト */}
+    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+      {todos.length === 0 ? (
+        <p className="text-gray-600">まだ TODO がありません。上のフォームから追加できます。</p>
+      ) : (
+        <ul>
+          {todos.map((todo) => (
+            <li
+              key={todo.id}
+              className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0"
+            >
+              <div className="flex items-center">
+                {/* チェックボックス */}
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() =>
+                    handleToggleComplete(todo.id, todo.completed)
+                  }
+                  className="form-checkbox h-5 w-5 text-blue-600"
+                />
+
+                {/* タイトル */}
+                <span
+                  className={`ml-3 text-lg ${
+                    todo.completed
+                      ? "line-through text-gray-500"
+                      : "text-gray-900"
+                  }`}
                 >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <p className="mt-6 text-gray-600">
-        <Link href="/" className="text-blue-600 hover:underline">
-          Go to Home
-        </Link>
-      </p>
-    </main>
-  );
+                  {todo.title}
+                </span>
+              </div>
+
+              {/* 削除ボタン */}
+              <button
+                onClick={() => handleDeleteTodo(todo.id)}
+                className="text-red-600 hover:text-red-800 transition"
+              >
+                削除
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    {/* ホームに戻るリンク */}
+    <p className="mt-6 text-gray-600">
+      <Link href="/" className="text-blue-600 hover:underline">
+        ホームへ戻る
+      </Link>
+    </p>
+  </main>
+);
+
 }
