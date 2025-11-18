@@ -7,7 +7,7 @@ export default function Home() {
       
       {/* サイトタイトル */}
       <h1 className="text-4xl font-bold text-blue-600 mb-4 text-center">
-        シンプルTODO管理サイト
+        TODO管理サイト
       </h1>
 
       {/* キャッチコピー */}
@@ -29,31 +29,6 @@ export default function Home() {
           </button>
         </Link>
       </div>
-
-      {/* 機能紹介 */}
-      <section className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">TODOリスト管理</h2>
-          <p>タスクの追加・編集・完了管理が簡単に操作できます。</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">効率的な整理</h2>
-          <p>重要なタスクを見逃さず、毎日の効率を最大化します。</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">簡単操作</h2>
-          <p>誰でもすぐに使えるシンプルなデザインです。</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">リアルタイム同期</h2>
-          <p>高速キャッシュと同期で、いつでも最新の状態を保持します。</p>
-        </div>
-      </section>
-
-      {/* フッター */}
-      <footer className="mt-16 text-gray-500 text-sm text-center">
-        © 2025 シンプルTODO管理サイト. All rights reserved.
-      </footer>
     </main>
   );
 }
