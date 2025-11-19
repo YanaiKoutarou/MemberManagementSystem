@@ -1,43 +1,47 @@
-version: '3.8'
+version: '3.8' # Docker Compose ファイルのバージョン指定
 
 services:
+  # Next.js アプリケーションサービス
   nextjs-app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .         # Dockerfile のあるコンテキスト
+      dockerfile: Dockerfile # 使用する Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:3000"     # ホストの 3000 番ポートをコンテナの 3000 番ポートにマッピング
     environment:
-      DATABASE_URL: postgresql://user:password@db:5432/mydatabase?schema=public
-      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://user:password@db:5432/mydatabase?schema=public # 環境変数で DB 接続情報を設定
+      REDIS_URL: redis://redis:6379 # 環境変数で Redis の接続情報を設定
     depends_on:
-      - db
-      - redis
+      - db              # db コンテナ起動後に起動
+      - redis           # redis コンテナ起動後に起動
     volumes:
-      - .:/app
-      - /app/node_modules # Exclude node_modules from host mount to prevent issues
-    command: npm run dev # Use npm run dev for development, build for production
+      - .:/app          # カレントディレクトリをコンテナの /app にマウント
+      - /app/node_modules # node_modules はホストからマウントしない
+    command: npm run dev  # 開発用は npm run dev、プロダクションでは build などに変更
 
+  # PostgreSQL データベースサービス
   db:
-    image: postgres:16-alpine
-    restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
+    image: postgres:16-alpine # 軽量な PostgreSQL イメージを使用
+    restart: always     # コンテナが停止した場合に自動再起動
+    environment: 
+      POSTGRES_USER: user # データベース接続ユーザー名
+      POSTGRES_PASSWORD: password # データベース接続パスワード
+      POSTGRES_DB: mydatabase # 初期データベース名
     ports:
-      - "5432:5432"
+      - "5432:5432"     # ホストの 5432 番ポートをコンテナにマッピング
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data # 永続化データ用ボリューム
 
+  # Redis キャッシュサービス
   redis:
-    image: redis:7-alpine
-    restart: always
+    image: redis:7-alpine # 軽量な Redis イメージを使用
+    restart: always     # コンテナが停止した場合に自動再起動
     ports:
-      - "6379:6379"
+      - "6379:6379"     # ホストの 6379 番ポートをコンテナにマッピング
     volumes:
-      - redis-data:/data
+      - redis-data:/data # 永続化データ用ボリューム
 
+# 永続化ボリューム定義
 volumes:
-  db-data:
-  redis-data:
+  db-data: # PostgreSQL 用データボリューム
+  redis-data: # Redis 用データボリューム

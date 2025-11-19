@@ -1,3 +1,6 @@
+/* Tailwind のベーススタイルを読み込む */
 @tailwind base;
+/* Tailwind のコンポーネントスタイルを読み込む */
 @tailwind components;
+/* Tailwind のユーティリティクラスを読み込む */
 @tailwind utilities;
