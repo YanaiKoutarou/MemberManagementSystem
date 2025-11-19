@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"; // PrismaClient をインポート
+import { PrismaClient } from "@/generated/prisma"; // PrismaClient をインポート
 
 // NodeJS のグローバル型に prisma を追加
 declare global {

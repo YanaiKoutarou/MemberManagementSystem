@@ -3,10 +3,7 @@ import { NextResponse } from "next/server";
 // bcryptjs をインポート（パスワードのハッシュ化に使用）
 import bcrypt from "bcryptjs";
 // PrismaClient をインポート（データベースへの接続/操作に使用）
-import { PrismaClient } from "@prisma/client";
-
-// Prisma クライアントのインスタンス生成
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma"; // src/lib/prisma.ts から prisma インスタンスをインポート
 
 // ユーザー登録（POST）API
 export async function POST(request: Request) {

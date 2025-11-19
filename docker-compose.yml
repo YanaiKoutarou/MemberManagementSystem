@@ -11,13 +11,14 @@ services:
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/mydatabase?schema=public # 環境変数で DB 接続情報を設定
       REDIS_URL: redis://redis:6379 # 環境変数で Redis の接続情報を設定
+      NEXTAUTH_SECRET: "your-super-secret-random-string-for-nextauth" # NextAuth.js のシークレット
     depends_on:
       - db              # db コンテナ起動後に起動
       - redis           # redis コンテナ起動後に起動
     volumes:
       - .:/app          # カレントディレクトリをコンテナの /app にマウント
       - /app/node_modules # node_modules はホストからマウントしない
-    command: npm run dev  # 開発用は npm run dev、プロダクションでは build などに変更
+    command: npm run dev  # 開発用は npm run devを実行
 
   # PostgreSQL データベースサービス
   db:
