@@ -18,7 +18,7 @@ services:
     volumes:
       - .:/app          # カレントディレクトリをコンテナの /app にマウント
       - /app/node_modules # node_modules はホストからマウントしない
-    command: npm run dev  # 開発用は npm run devを実行
+    command: sh -c "npm run prisma:migrate && npm run dev" # マイグレーション実行後に開発サーバー起動
 
   # PostgreSQL データベースサービス
   db:
