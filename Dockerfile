@@ -14,7 +14,7 @@ RUN npm install
 COPY prisma ./prisma
 
 # 環境変数 DATABASE_URL を設定（Prisma 用）
-ENV DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
+ENV DATABASE_URL="postgresql://user:password@db:5432/mydatabase?schema=public"
 
 # Prisma クライアントを生成
 RUN npx prisma generate
@@ -22,5 +22,10 @@ RUN npx prisma generate
 # アプリケーションのソースコードを全てコピー
 COPY . .
 
+# entrypoint.sh をコピーして実行権限を付与
+COPY entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
+
 # 開発用サーバーを起動
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["npm", "run", "dev"]

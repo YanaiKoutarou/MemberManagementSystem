@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "@/lib/auth-client";
 
 export default function Login() {
   // 🔤 入力フォームの状態管理（メールアドレスとパスワード）
@@ -26,40 +27,19 @@ export default function Login() {
     setMessage(""); // 前回のメッセージをクリア
 
     try {
-      // 🔐 ログイン API 呼び出し
-      const response = await fetch("/api/login", {
-        method: "POST", // POST メソッド
-        headers: {
-          "Content-Type": "application/json", // JSON 形式で送信
-        },
-        body: JSON.stringify({ email, password }), // 入力データを送信
+      const result = await signIn.email({
+        email,
+        password,
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // 🎉 ログイン成功
-        setMessage(data.message);
-
-        // API 側が redirect を指定している場合はその URL へ遷移
-        if (data.redirect) {
-          router.push(data.redirect);
-        } else {
-          router.push("/"); // デフォルトはホームページへ遷移
-        }
+      if (result.error) {
+        setMessage(result.error.message || "Signup faield");
       } else {
-        // ⚠️ ログイン失敗時（パスワード間違いなど）
-        setMessage(data.message || "Login failed");
+        router.push("/todos");
       }
-    } catch (error) {
-      // 🚫 ネットワークエラーなど
-      console.error("Login error:", error);
-      setMessage("An unexpected error occurred.");
+    } catch (err) {
+      setMessage("An error occurred during signup");
+      console.error(err);
     }
-
-    // 入力欄をクリア
-    setEmail("");
-    setPassword("");
   };
 
   return (

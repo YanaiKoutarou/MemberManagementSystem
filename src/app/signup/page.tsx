@@ -3,58 +3,39 @@
 import { useState } from "react"; // React の useState フックをインポート
 import Link from "next/link"; // Next.js のリンクコンポーネントをインポート
 import { useRouter } from "next/navigation"; // Next.js のルーターをインポート
+import { signUp } from "@/lib/auth-client";
 
 export default function Signup() {
-  // 🔤 入力されたメールアドレスとパスワードの状態管理
+  // 🔤 入力された名前・メールアドレス・パスワードの状態管理
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // 📝 成功またはエラーメッセージ
   const [message, setMessage] = useState("");
 
-  // ⛳ ページ遷移用のフック
+  // ⛳ ページ遷移用フック
   const router = useRouter();
 
   /**
    * 🚀 ユーザー登録フォーム送信処理
-   * - /api/signup に POST リクエスト
-   * - 登録成功後はログインページへ遷移
    */
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // フォーム送信によるページリロードを防止
-    setMessage(""); // 前回のメッセージをリセット
-
+    e.preventDefault();
     try {
-      // 🔐 新規登録 API を呼び出し
-      const response = await fetch("/api/signup", {
-        method: "POST", // POST メソッド
-        headers: {
-          "Content-Type": "application/json", // JSON 形式で送信
-        },
-        body: JSON.stringify({ email, password }), // 入力データを送信
+      const result = await signUp.email({
+        name,
+        email,
+        password,
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // 🎉 登録成功
-        setMessage(data.message);
-
-        // ログインページへリダイレクト
-        router.push("/login");
+      if (result.error) {
+        setMessage(result.error.message || "Signup failed");
       } else {
-        // ⚠️ 登録失敗（すでに存在するメールアドレスなど）
-        setMessage(data.message || "Registration failed");
+        router.push("/login");
       }
     } catch (error) {
-      // 🚫 通信エラーなど
-      console.error("Signup error:", error);
-      setMessage("An unexpected error occurred.");
+      setMessage("エラーが発生しました");
     }
-
-    // 入力欄をクリア
-    setEmail("");
-    setPassword("");
   };
 
   return (
@@ -66,13 +47,25 @@ export default function Signup() {
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white p-8 rounded-lg shadow-md"
       >
+        {/* 名前入力欄 */}
+        <label className="block mb-4">
+          <span className="text-gray-700">名前</span>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </label>
+
         {/* メールアドレス入力欄 */}
         <label className="block mb-4">
           <span className="text-gray-700">メールアドレス</span>
           <input
             type="email"
-            value={email} // メールアドレス状態を反映
-            onChange={(e) => setEmail(e.target.value)} // 入力データを state に反映
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
@@ -83,8 +76,8 @@ export default function Signup() {
           <span className="text-gray-700">パスワード</span>
           <input
             type="password"
-            value={password} // パスワード状態を反映
-            onChange={(e) => setPassword(e.target.value)} // 入力データを state に反映
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
@@ -99,12 +92,12 @@ export default function Signup() {
         </button>
 
         {/* 成功 / 失敗メッセージ */}
-        {message && <p className="mt-4 text-green-600">{message}</p>}
+        {message && <p className="mt-4 text-red-600">{message}</p>}
       </form>
 
       {/* ログインページへのリンク */}
       <p className="mt-6 text-gray-600">
-        すでにアカウントをお持ちですか?
+        すでにアカウントをお持ちですか?{" "}
         <Link href="/login" className="text-blue-600 hover:underline">
           ログイン
         </Link>
